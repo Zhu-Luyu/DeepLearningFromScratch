@@ -15,13 +15,14 @@ def img_show(img):
     pil_img = Image.fromarray(np.uint8(img))
     pil_img.show()
     
-img=x_train[0]
-lable=t_train[0]
+img=x_train[1]
+lable=t_train[1]
 
 print(lable)
 
 print(f'img.shape:{img.shape}')
 img = img.reshape(28,28)
 print(f'img.shape:{img.shape}')
+print(f'lable:{lable}')
 
 img_show(img)

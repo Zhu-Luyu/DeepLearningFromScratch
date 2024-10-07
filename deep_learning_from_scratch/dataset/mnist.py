@@ -22,7 +22,8 @@ key_file = {
 }
 
 dataset_dir = os.path.dirname(os.path.abspath(__file__))
-save_file = dataset_dir + "/mnist.pkl"
+# save_file = dataset_dir + "/mnist.pkl"
+save_file = dataset_dir + "/MNIST/raw/train-images-idx3-ubyte.gz"
 
 train_num = 60000
 test_num = 10000
@@ -106,47 +107,48 @@ def load_mnist(normalize=True, flatten=True, one_hot_label=False):
     -------
     (训练图像, 训练标签), (测试图像, 测试标签)
     """
-    if not os.path.exists(save_file):
+    # if not os.path.exists(save_file):
         # 如果本地文件不存在，则尝试使用 torch 来下载数据集
-        print("Local MNIST dataset not found, using torchvision to download...")
-        transform = transforms.Compose([transforms.ToTensor()])
+    # print("Local MNIST dataset not found, using torchvision to download...")
+    transform = transforms.Compose([transforms.ToTensor()])
         
-        train_set = torchvision.datasets.MNIST(root=dataset_dir, train=True, download=True, transform=transform)
-        test_set = torchvision.datasets.MNIST(root=dataset_dir, train=False, download=True, transform=transform)
+    train_set = torchvision.datasets.MNIST(root=dataset_dir, train=True, download=True, transform=transform)
+    test_set = torchvision.datasets.MNIST(root=dataset_dir, train=False, download=True, transform=transform)
         
-        x_train = train_set.data.numpy()
-        t_train = train_set.targets.numpy()
-        x_test = test_set.data.numpy()
-        t_test = test_set.targets.numpy()
+    x_train = train_set.data.numpy()
+    t_train = train_set.targets.numpy()
+    x_test = test_set.data.numpy()
+    t_test = test_set.targets.numpy()
         
-        if flatten:
-            x_train = x_train.reshape(train_num, -1)
-            x_test = x_test.reshape(test_num, -1)
+    if flatten:
+        x_train = x_train.reshape(train_num, -1)
+        x_test = x_test.reshape(test_num, -1)
             
-        if normalize:
-            x_train = x_train.astype(np.float32) / 255.0
-            x_test = x_test.astype(np.float32) / 255.0
+    if normalize:
+        x_train = x_train.astype(np.float32) / 255.0
+        x_test = x_test.astype(np.float32) / 255.0
             
-        return (x_train, t_train), (x_test, t_test)
         
     # 加载本地数据集（如果存在）
-    with open(save_file, 'rb') as f:
-        dataset = pickle.load(f)
+    # with open(save_file, 'rb') as f:
+        # dataset = pickle.load(f)
     
-    if normalize:
-        for key in ('train_img', 'test_img'):
-            dataset[key] = dataset[key].astype(np.float32)
-            dataset[key] /= 255.0
+    # if normalize:
+    #     for key in ('train_img', 'test_img'):
+    #         dataset[key] = dataset[key].astype(np.float32)
+    #         dataset[key] /= 255.0
             
     if one_hot_label:
-        dataset['train_label'] = _change_one_hot_label(dataset['train_label'])
-        dataset['test_label'] = _change_one_hot_label(dataset['test_label'])
+        t_train = _change_one_hot_label(t_train)
+        t_test = _change_one_hot_label(t_test)
     
-    if not flatten:
-         for key in ('train_img', 'test_img'):
-            dataset[key] = dataset[key].reshape(-1, 1, 28, 28)
+    # if not flatten:
+    #      for key in ('train_img', 'test_img'):
+    #         dataset[key] = dataset[key].reshape(-1, 1, 28, 28)
 
-    return (dataset['train_img'], dataset['train_label']), (dataset['test_img'], dataset['test_label']) 
+    # return (dataset['train_img'], dataset['train_label']), (dataset['test_img'], dataset['test_label']) 
+    return (x_train, t_train), (x_test, t_test)
+
 
 
 if __name__ == '__main__':
