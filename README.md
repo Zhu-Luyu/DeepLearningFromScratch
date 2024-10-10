@@ -12,3 +12,8 @@
 - [ ] chapter-6: 与学习相关的技巧
 - [ ] chapter-7: 卷积神经网络
 - [ ] chapter-8: 深度学习
+
+## 2nd Todo List
+
+- [ ] chapter-5: MLP From Scratch
+- [ ] chapter-6: Optimizer From Scratch
